@@ -59,7 +59,7 @@ function init_element() {
 
     elem_container = document.createElement('div');
     elem_container.id = "transcription";
-    elem_container.style.cssText = 'padding-top:16px;font-size:18px;position: fixed; top: 85%; left: 50%; transform: translate(-50%, -50%);line-height:18px;width:500px;height:180px;opacity:0.9;z-index:100;background:black;border-radius:10px;color:white;';
+    elem_container.style.cssText = 'padding-top:16px;font-size:18px;position: fixed; top: 85%; left: 50%; transform: translate(-50%, -50%);line-height:18px;width:500px;height:120px;opacity:0.9;z-index:100;background:black;border-radius:10px;color:white;';
 
     for (var i = 0; i < 4; i++) {
         elem_text = document.createElement('span');
@@ -161,7 +161,7 @@ function get_lines(elem, line_height) {
 
 function remove_element() {
     var elem = document.getElementById('transcription')
-    for (var i = 0; i < 8; i++) {
+    for (var i = 0; i < 4; i++) {
         document.getElementById("t" + i).remove();
     }
     elem.remove()
