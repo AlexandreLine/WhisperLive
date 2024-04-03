@@ -59,7 +59,7 @@ function init_element() {
 
     elem_container = document.createElement('div');
     elem_container.id = "transcription";
-    elem_container.style.cssText = 'padding-top:16px;font-size:18px;position: fixed; top: 85%; left: 50%; transform: translate(-50%, -50%);line-height:18px;width:500px;height:90px;opacity:0.9;z-index:100;background:black;border-radius:10px;color:white;';
+    elem_container.style.cssText = 'padding-top:16px;font-size:18px;position: fixed; top: 85%; left: 50%; transform: translate(-50%, -50%);line-height:18px;width:500px;height:180px;opacity:0.9;z-index:100;background:black;border-radius:10px;color:white;';
 
     for (var i = 0; i < 4; i++) {
         elem_text = document.createElement('span');
@@ -169,7 +169,7 @@ function remove_element() {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const { type, data } = request;
-    
+
     if (type === "STOP") {
         remove_element();
         sendResponse({data: "STOPPED"});
@@ -192,7 +192,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         text += message[i].text + ' ';
     }
     text = text.replace(/(\r\n|\n|\r)/gm, "");
-    
+
     var elem = document.getElementById('t3');
     elem.innerHTML = text;
 
@@ -203,7 +203,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     text_segments = [];
     text_segments = get_lines(elem, line_height);
-    
+
     elem.innerHTML = '';
 
     if (text_segments.length > 2) {
