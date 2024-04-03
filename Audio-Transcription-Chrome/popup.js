@@ -70,8 +70,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const currentTab = await getCurrentTab();
 
     // Send a message to the background script to start capturing
-    let host = "localhost";
-    let port = "9090";
+    let host = "34.163.171.129";
+    let port = "9091";
     const useCollaboraServer = useServerCheckbox.checked;
     if (useCollaboraServer){
       host = "transcription.kurg.org"
@@ -79,8 +79,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     chrome.runtime.sendMessage(
-      { 
-        action: "startCapture", 
+      {
+        action: "startCapture",
         tabId: currentTab.id,
         host: host,
         port: port,
@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
     useVadCheckbox.disabled = isCapturing;
     modelSizeDropdown.disabled = isCapturing;
     languageDropdown.disabled = isCapturing;
-    taskDropdown.disabled = isCapturing; 
+    taskDropdown.disabled = isCapturing;
     startButton.classList.toggle("disabled", isCapturing);
     stopButton.classList.toggle("disabled", !isCapturing);
   }
@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
   chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     if (request.action === "updateSelectedLanguage") {
       const detectedLanguage = request.detectedLanguage;
-  
+
       if (detectedLanguage) {
         languageDropdown.value = detectedLanguage;
         chrome.storage.local.set({ selectedLanguage: detectedLanguage });
@@ -182,5 +182,5 @@ document.addEventListener("DOMContentLoaded", function () {
       chrome.storage.local.set({ capturingState: { isCapturing: false } })
     }
   });
-  
+
 });
