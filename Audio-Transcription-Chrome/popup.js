@@ -1,7 +1,5 @@
 // Wait for the DOM content to be fully loaded
 document.addEventListener("DOMContentLoaded", function () {
-  const dotenv = require('dotenv');
-
   const startButton = document.getElementById("startCapture");
   const stopButton = document.getElementById("stopCapture");
 
