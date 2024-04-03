@@ -19,14 +19,14 @@ logging.basicConfig(level=logging.INFO)
 
 
 class ClientManager:
-    def __init__(self, max_clients=4, max_connection_time=600):
+    def __init__(self, max_clients=4, max_connection_time=3600*3):
         """
         Initializes the ClientManager with specified limits on client connections and connection durations.
 
         Args:
             max_clients (int, optional): The maximum number of simultaneous client connections allowed. Defaults to 4.
             max_connection_time (int, optional): The maximum duration (in seconds) a client can stay connected. Defaults
-                                                 to 600 seconds (10 minutes).
+                                                 to 3600*3 seconds (3 hours).
         """
         self.clients = {}
         self.start_times = {}

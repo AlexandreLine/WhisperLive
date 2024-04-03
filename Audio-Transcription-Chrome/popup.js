@@ -1,5 +1,7 @@
 // Wait for the DOM content to be fully loaded
 document.addEventListener("DOMContentLoaded", function () {
+  const dotenv = require('dotenv');
+
   const startButton = document.getElementById("startCapture");
   const stopButton = document.getElementById("stopCapture");
 
@@ -70,8 +72,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const currentTab = await getCurrentTab();
 
     // Send a message to the background script to start capturing
-    let host = "34.163.171.129";
-    let port = "9091";
+    dotenv.config();
+    let host = process.env.HOST;
+    let port = process.env.PORT;
     const useCollaboraServer = useServerCheckbox.checked;
     if (useCollaboraServer){
       host = "transcription.kurg.org"
