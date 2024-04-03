@@ -161,7 +161,7 @@ function get_lines(elem, line_height) {
 
 function remove_element() {
     var elem = document.getElementById('transcription')
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < 8; i++) {
         document.getElementById("t" + i).remove();
     }
     elem.remove()
