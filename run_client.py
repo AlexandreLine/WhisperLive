@@ -15,4 +15,4 @@ client = TranscriptionClient(
     translate=False,
     model="small",
     use_vad=False)
-client("/assets/jfk.flac")
+client("./assets/jfk.flac")
