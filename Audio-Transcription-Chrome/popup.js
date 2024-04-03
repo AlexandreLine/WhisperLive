@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const stopButton = document.getElementById("stopCapture");
 
   const useServerCheckbox = document.getElementById("useServerCheckbox");
+  const gcpServer = document.getElementById("gcpServer");
+  const gcpPort = document.getElementById("gcpPort");
   const useVadCheckbox = document.getElementById("useVadCheckbox");
   const languageDropdown = document.getElementById('languageDropdown');
   const taskDropdown = document.getElementById('taskDropdown');
@@ -72,9 +74,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const currentTab = await getCurrentTab();
 
     // Send a message to the background script to start capturing
-    dotenv.config();
-    let host = process.env.HOST;
-    let port = process.env.PORT;
+    let host = gcpServer;
+    let port = gcpPort;
     const useCollaboraServer = useServerCheckbox.checked;
     if (useCollaboraServer){
       host = "transcription.kurg.org"

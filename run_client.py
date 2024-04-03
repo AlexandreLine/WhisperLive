@@ -1,11 +1,16 @@
 import os
+from env import *
 from whisper_live.client import TranscriptionClient
 
-print("[INFO]: Connection attempted on server " + os.environ.get("HOST") + ":" + os.environ.get("PORT"))
+
+host = os.environ.get("HOST") if os.environ.get("HOST") != None else HOST
+port = os.environ.get("PORT") if os.environ.get("PORT") != None else PORT
+
+print("[INFO]: Connection attempted on server " + host + ":" + str(port))
 
 client = TranscriptionClient(
-    host=os.environ.get("HOST"),
-    port=os.environ.get("PORT"),
+    host=host,
+    port=int(port),
     lang="en",
     translate=False,
     model="small",

@@ -1,12 +1,15 @@
 import os
+from env import *
 import argparse
 from whisper_live.server import TranscriptionServer
+
+port = os.environ.get("PORT") if os.environ.get("PORT") != None else PORT
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--port', '-p',
                         type=int,
-                        default=os.environ.get("PORT"),
+                        default=int(port),
                         help="Websocket port to run the server on.")
     parser.add_argument('--backend', '-b',
                         type=str,
