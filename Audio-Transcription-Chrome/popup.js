@@ -4,8 +4,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const stopButton = document.getElementById("stopCapture");
 
   const useServerCheckbox = document.getElementById("useServerCheckbox");
-  const gcpServer = document.getElementById("gcpServer");
-  const gcpPort = document.getElementById("gcpPort");
   const useVadCheckbox = document.getElementById("useVadCheckbox");
   const languageDropdown = document.getElementById('languageDropdown');
   const taskDropdown = document.getElementById('taskDropdown');
@@ -72,12 +70,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const currentTab = await getCurrentTab();
 
     // Send a message to the background script to start capturing
-    let host = gcpServer;
-    let port = gcpPort;
-    const useCollaboraServer = useServerCheckbox.checked;
-    if (useCollaboraServer){
-      host = "transcription.kurg.org"
-      port = "7090"
+    let host = "transcription.kurg.org";
+    let port = "7090";
+    const useGCPServer = useServerCheckbox.checked;
+    if (useGCPServer){
+      host = "34.90.67.214"
+      port = "9292"
     }
 
     chrome.runtime.sendMessage(
