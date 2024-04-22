@@ -3,3 +3,4 @@ whisper_live/__pycache__/*.pyc
 *.pyc
 .env
 env.py
+*.wav
