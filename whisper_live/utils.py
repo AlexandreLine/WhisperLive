@@ -1,6 +1,6 @@
 import os
 import textwrap
-import scipy
+from scipy.io import wavfile
 import ffmpeg
 import numpy as np
 
@@ -67,5 +67,5 @@ def resample(file: str, sr: int = 16000):
     np_buffer = np.frombuffer(out, dtype=np.int16)
 
     resampled_file = f"{file.split('.')[0]}_resampled.wav"
-    scipy.io.wavfile.write(resampled_file, sr, np_buffer.astype(np.int16))
+    wavfile.write(resampled_file, sr, np_buffer.astype(np.int16))
     return resampled_file
