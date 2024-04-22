@@ -1,9 +1,9 @@
 import os
-from env import *
+#from env import *
 import argparse
 from whisper_live.server import TranscriptionServer
 
-port = os.environ.get("PORT") if os.environ.get("PORT") != None else PORT
+port = os.environ.get("PORT") #if os.environ.get("PORT") != None else PORT
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
