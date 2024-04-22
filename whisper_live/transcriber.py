@@ -342,7 +342,7 @@ class WhisperModel:
 
         if language is None:
             if not self.model.is_multilingual:
-                language = "en"
+                language = "fr"#"en"
                 language_probability = 1
             else:
                 segment = features[:, : self.feature_extractor.nb_max_frames]
