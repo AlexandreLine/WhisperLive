@@ -4,3 +4,5 @@ whisper_live/__pycache__/*.pyc
 .env
 env.py
 *.wav
+/assets/*
+*.srt
