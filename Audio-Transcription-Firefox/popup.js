@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", function() {
   const stopButton = document.getElementById("stopCapture");
 
   const useServerCheckbox = document.getElementById("useServerCheckbox");
+  const gcpServer = document.getElementById("gcpServer");
+  const gcpPort = document.getElementById("gcpPort");
   const useVadCheckbox = document.getElementById("useVadCheckbox");
   const languageDropdown = document.getElementById('languageDropdown');
   const taskDropdown = document.getElementById('taskDropdown');
@@ -63,8 +65,8 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   startButton.addEventListener("click", function() {
-    let host = "localhost";
-    let port = "9090";
+    let host = gcpServer;
+    let port = gcpPort;
     const useCollaboraServer = useServerCheckbox.checked;
 
     if (useCollaboraServer){

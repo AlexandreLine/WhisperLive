@@ -13,7 +13,7 @@ client = TranscriptionClient(
     port=int(port),
     lang="fr",
     translate=False,
-    model="large-v3",
+    model="small",
     #srt_file_path="assets/ZOOM0004.srt",
     use_vad=True)
-client("./assets/ZOOM0003.WAV")
+client("./assets/ZOOM0004.WAV")
