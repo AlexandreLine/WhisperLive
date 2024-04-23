@@ -28,7 +28,7 @@ class Client:
         model="small",
         srt_file_path="output.srt",
         use_vad=True,
-        listen=True
+        play=True
     ):
         """
         Initializes a Client instance for audio recording and streaming to a server.
@@ -54,7 +54,7 @@ class Client:
         self.server_error = False
         self.srt_file_path = srt_file_path
         self.use_vad = use_vad
-        self.listen = listen
+        self.play = play
         self.last_segment = None
         self.last_received_segment = None
 
@@ -276,20 +276,20 @@ class TranscriptionTeeClient:
     """
     def __init__(self, clients):
         self.clients = clients
-        self.listen=True
+        self.play=True
         if not self.clients:
-            self.listen=False
+            self.play=False
             raise Exception("At least one client is required.")
         else:
             for i in self.clients:
-                self.listen = i.listen
+                self.play = i.play
         self.chunk = 4096
         self.format = pyaudio.paInt16
         self.channels = 1
         self.rate = 16000
         self.record_seconds = 60000
         self.frames = b""
-        if self.listen:
+        if self.play:
             self.p = pyaudio.PyAudio()
             try:
                 self.stream = self.p.open(
@@ -329,8 +329,7 @@ class TranscriptionTeeClient:
             self.process_hls_stream(hls_url)
         elif audio is not None:
             resampled_file = utils.resample(audio)
-            if self.listen:
-                self.play_file(resampled_file)
+            self.play_file(resampled_file, self.play)
         else:
             self.record()
 
@@ -356,7 +355,7 @@ class TranscriptionTeeClient:
             if (unconditional or client.recording):
                 client.send_packet_to_server(packet)
 
-    def play_file(self, filename):
+    def play_file(self, filename, play):
         """
         Play an audio file and send it to the server for processing.
 
@@ -598,6 +597,6 @@ class TranscriptionClient(TranscriptionTeeClient):
         transcription_client()
         ```
     """
-    def __init__(self, host, port, lang=None, translate=False, model="small", use_vad=True, listen=True):
-        self.client = Client(host, port, lang, translate, model, srt_file_path="output.srt", use_vad=use_vad, listen=listen)
+    def __init__(self, host, port, lang=None, translate=False, model="small", use_vad=True, play=True):
+        self.client = Client(host, port, lang, translate, model, srt_file_path="output.srt", use_vad=use_vad, play=play)
         TranscriptionTeeClient.__init__(self, [self.client])

@@ -16,5 +16,5 @@ client = TranscriptionClient(
     model="distil-large-v3",
     #srt_file_path="assets/ZOOM0004.srt",
     use_vad=True,
-    listen=False)
+    play=False)
 client("./assets/jfl.flac")
