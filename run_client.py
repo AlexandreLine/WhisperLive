@@ -12,8 +12,9 @@ client = TranscriptionClient(
     host=host,
     port=int(port),
     lang="fr",
-    translate=False,
-    model="small",
+    translate=True,
+    model="distil-large-v3",
     #srt_file_path="assets/ZOOM0004.srt",
-    use_vad=True)
-client("./assets/ZOOM0004.WAV")
+    use_vad=True,
+    listen=False)
+client("./assets/jfl.flac")

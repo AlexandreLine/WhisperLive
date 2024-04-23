@@ -27,7 +27,8 @@ class Client:
         translate=False,
         model="small",
         srt_file_path="output.srt",
-        use_vad=True
+        use_vad=True,
+        listen=True
     ):
         """
         Initializes a Client instance for audio recording and streaming to a server.
@@ -53,6 +54,7 @@ class Client:
         self.server_error = False
         self.srt_file_path = srt_file_path
         self.use_vad = use_vad
+        self.listen = listen
         self.last_segment = None
         self.last_received_segment = None
 
@@ -274,25 +276,33 @@ class TranscriptionTeeClient:
     """
     def __init__(self, clients):
         self.clients = clients
+        self.listen=True
         if not self.clients:
+            self.listen=False
             raise Exception("At least one client is required.")
+        else:
+            for i in self.clients:
+                self.listen = i.listen
         self.chunk = 4096
         self.format = pyaudio.paInt16
         self.channels = 1
         self.rate = 16000
         self.record_seconds = 60000
         self.frames = b""
-        self.p = pyaudio.PyAudio()
-        try:
-            self.stream = self.p.open(
-                format=self.format,
-                channels=self.channels,
-                rate=self.rate,
-                input=True,
-                frames_per_buffer=self.chunk,
-            )
-        except OSError as error:
-            print(f"[WARN]: Unable to access microphone. {error}")
+        if self.listen:
+            self.p = pyaudio.PyAudio()
+            try:
+                self.stream = self.p.open(
+                    format=self.format,
+                    channels=self.channels,
+                    rate=self.rate,
+                    input=True,
+                    frames_per_buffer=self.chunk,
+                )
+            except OSError as error:
+                print(f"[WARN]: Unable to access microphone. {error}")
+                self.stream = None
+        else:
             self.stream = None
 
     def __call__(self, audio=None, hls_url=None):
@@ -319,7 +329,8 @@ class TranscriptionTeeClient:
             self.process_hls_stream(hls_url)
         elif audio is not None:
             resampled_file = utils.resample(audio)
-            self.play_file(resampled_file)
+            if self.listen:
+                self.play_file(resampled_file)
         else:
             self.record()
 
@@ -587,6 +598,6 @@ class TranscriptionClient(TranscriptionTeeClient):
         transcription_client()
         ```
     """
-    def __init__(self, host, port, lang=None, translate=False, model="small", use_vad=True):
-        self.client = Client(host, port, lang, translate, model, srt_file_path="output.srt", use_vad=use_vad)
+    def __init__(self, host, port, lang=None, translate=False, model="small", use_vad=True, listen=True):
+        self.client = Client(host, port, lang, translate, model, srt_file_path="output.srt", use_vad=use_vad, listen=listen)
         TranscriptionTeeClient.__init__(self, [self.client])
