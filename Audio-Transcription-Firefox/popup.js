@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const useGCPServer = useServerCheckbox.checked;
 
     if (useGCPServer){
-      host = "34.90.67.214"
+      host = "35.214.175.85"
       port = "9292"
     }
 
