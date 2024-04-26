@@ -10,6 +10,8 @@ from websockets.sync.server import serve
 from websockets.exceptions import ConnectionClosed
 from whisper_live.vad import VoiceActivityDetector
 from whisper_live.transcriber import WhisperModel
+import whisper_live.utils as utils
+
 try:
     from whisper_live.transcriber_tensorrt import WhisperTRTLLM
 except Exception:
@@ -708,6 +710,7 @@ class ServeClientFasterWhisper(ServeClientBase):
         else:
             self.model_size_or_path = model
         self.language = "en" if self.model_size_or_path.endswith("en") else language
+        self.output = utils.output_name()
         self.task = task
         self.initial_prompt = initial_prompt
         self.vad_parameters = vad_parameters or {"threshold": 0.5}
@@ -854,6 +857,7 @@ class ServeClientFasterWhisper(ServeClientBase):
             segments = self.get_previous_output()
 
         if len(segments):
+            utils.update_srt_file(segments, self.output)
             self.send_transcription_to_client(segments)
 
     def speech_to_text(self):

@@ -3,7 +3,7 @@ import textwrap
 from scipy.io import wavfile
 import ffmpeg
 import numpy as np
-
+from datetime import datetime
 
 def clear_screen():
     """Clears the console screen."""
@@ -40,6 +40,16 @@ def create_srt_file(segments, output_file):
 
             segment_number += 1
 
+def update_srt_file(segments, output_file):
+    with open(output_file, 'u', encoding='utf-8') as srt_file:
+        for segment in segments:
+            start_time = format_time(float(segment['start']))
+            end_time = format_time(float(segment['end']))
+            text = segment['text']
+
+            srt_file.write(f"{start_time} --> {end_time} : ")
+            srt_file.write(f"{text}\n")
+
 
 def resample(file: str, sr: int = 16000):
     """
@@ -69,3 +79,7 @@ def resample(file: str, sr: int = 16000):
     resampled_file = f"{file.split('.')[0]}_resampled.wav"
     wavfile.write(resampled_file, sr, np_buffer.astype(np.int16))
     return resampled_file
+
+def output_name(prefix : str = "", file_type:str = ".srt"):
+    now = datetime.now()
+    return prefix + now.strftime("%Y%m%d_%H%M%S") + file_type
