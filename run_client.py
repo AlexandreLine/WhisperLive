@@ -11,10 +11,10 @@ print("[INFO]: Connection attempted on server " + host + ":" + str(port))
 client = TranscriptionClient(
     host=host,
     port=int(port),
-    lang="fr",
+    lang="en",
     translate=True,
     model="distil-large-v3",
     #srt_file_path="assets/ZOOM0004.srt",
     use_vad=True,
     play=False)
-client("./assets/jfl.flac")
+client("./assets/jfk.flac")

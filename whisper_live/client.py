@@ -597,6 +597,6 @@ class TranscriptionClient(TranscriptionTeeClient):
         transcription_client()
         ```
     """
-    def __init__(self, host, port, lang=None, translate=False, model="small", use_vad=True, play=True):
-        self.client = Client(host, port, lang, translate, model, srt_file_path="output.srt", use_vad=use_vad, play=play)
+    def __init__(self, host, port, lang=None, translate=False, model="small", srt_file_path="output.srt", use_vad=True, play=True):
+        self.client = Client(host, port, lang, translate, model, srt_file_path=srt_file_path, use_vad=use_vad, play=play)
         TranscriptionTeeClient.__init__(self, [self.client])
