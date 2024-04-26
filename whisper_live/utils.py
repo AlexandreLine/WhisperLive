@@ -41,7 +41,7 @@ def create_srt_file(segments, output_file):
             segment_number += 1
 
 def update_srt_file(segments, output_file):
-    with open(output_file, 'u', encoding='utf-8') as srt_file:
+    with open(output_file, 'a', encoding='utf-8') as srt_file:
         for segment in segments:
             start_time = format_time(float(segment['start']))
             end_time = format_time(float(segment['end']))
