@@ -3,6 +3,7 @@ import textwrap
 from scipy.io import wavfile
 import ffmpeg
 import numpy as np
+import pandas as pd
 from datetime import datetime
 
 def clear_screen():
@@ -41,14 +42,36 @@ def create_srt_file(segments, output_file):
             segment_number += 1
 
 def update_srt_file(segments, output_file):
-    with open(output_file, 'a', encoding='utf-8') as srt_file:
+    path = "transcripts/"+output_file
+    if not os.path.exists(path):
+        with open(path, 'w', encoding='utf-8') as srt_file:
+            srt_file.write("start;end;text\n")
+
+    with open(path, 'a', encoding='utf-8') as srt_file:
         for segment in segments:
             start_time = format_time(float(segment['start']))
             end_time = format_time(float(segment['end']))
             text = segment['text']
 
-            srt_file.write(f"{start_time} --> {end_time} : ")
-            srt_file.write(f"{text}\n")
+            srt_file.write(f"{start_time};{end_time};{text}\n")
+
+
+def clean_output(file, cleaned_suffix : bool = True):
+    path = "transcripts/" + file
+
+    df = pd.read_csv(path, sep=";")
+
+
+    df['start_dt'] = pd.to_datetime(df['start'], format='%H:%M:%S,%f')
+    df['end_dt'] = pd.to_datetime(df['end'], format='%H:%M:%S,%f')
+
+    print(df.info())
+
+    if cleaned_suffix:
+        path = path[0:-4] + "_cleaned.srt"
+
+    df[['start','end','text']].to_csv(path, sep=";")
+
 
 
 def resample(file: str, sr: int = 16000):

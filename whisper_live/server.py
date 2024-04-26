@@ -879,6 +879,8 @@ class ServeClientFasterWhisper(ServeClientBase):
         """
         while True:
             if self.exit:
+                logging.info(f"Clean transcript : {self.output}")
+                utils.clean_output(self.output)
                 logging.info("Exiting speech to text thread")
                 break
 
@@ -919,8 +921,8 @@ class ServeClientFasterWhisper(ServeClientBase):
                 of the transcription.
         """
         return {
-            'start': "{:.3f}".format(start),
-            'end': "{:.3f}".format(end),
+            'start': "{:.6f}".format(start),
+            'end': "{:.6f}".format(end),
             'text': text
         }
 
