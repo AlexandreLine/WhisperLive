@@ -3,6 +3,7 @@ import textwrap
 from scipy.io import wavfile
 import ffmpeg
 import numpy as np
+import logging
 import pandas as pd
 from datetime import datetime
 
@@ -41,6 +42,7 @@ def create_srt_file(segments, output_file):
 
             segment_number += 1
 
+
 def update_srt_file(segments, output_file):
     path = "transcripts/"+output_file
     if not os.path.exists(path):
@@ -56,10 +58,14 @@ def update_srt_file(segments, output_file):
             srt_file.write(f"{start_time};{end_time};{text}\n")
 
 
-def clean_output(file, cleaned_suffix : bool = True):
+def clean_output(file, cleaned_suffix : bool = True, del_temp : bool = True):
     path = "transcripts/" + file
 
-    df = pd.read_csv(path, sep=";")
+    try :
+        df = pd.read_csv(path, sep=";")
+    except Exception as e:
+        logging.error(f"[ERROR]: Failed to load temp transcript located {path} : {e}")
+        return
 
 
     df['start_dt'] = pd.to_datetime(df['start'], format='%H:%M:%S,%f')
@@ -80,11 +86,20 @@ def clean_output(file, cleaned_suffix : bool = True):
 
     df.drop(index=index_to_drop, inplace=True)
 
+    if del_temp:
+        # Try to delete the file.
+        try:
+            os.remove(path)
+        except OSError as e:
+            # If it fails, inform the user.
+            logging.error("[ERROR]: %s - %s." % (e.filename, e.strerror))
 
     if cleaned_suffix:
         path = path[0:-4] + "_cleaned.srt"
 
     df[['start','end','text']].to_csv(path, sep=";")
+
+
 
 
 
@@ -122,4 +137,4 @@ def output_name(prefix : str = "", file_type:str = ".srt"):
     return prefix + now.strftime("%Y%m%d_%H%M%S") + file_type
 
 if __name__ == "__main__":
-    clean_output("20240429_113320.srt")
+    clean_output("20240429_130052.srt")
