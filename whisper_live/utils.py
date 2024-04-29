@@ -65,7 +65,21 @@ def clean_output(file, cleaned_suffix : bool = True):
     df['start_dt'] = pd.to_datetime(df['start'], format='%H:%M:%S,%f')
     df['end_dt'] = pd.to_datetime(df['end'], format='%H:%M:%S,%f')
 
-    print(df.info())
+    df.drop_duplicates(['start_dt'], keep='last', inplace=True)
+    df.drop_duplicates(['end_dt'], keep='last', inplace=True)
+    df.drop_duplicates(['text'], keep='last', inplace=True)
+    df.sort_values(['start_dt'], inplace=True)
+
+
+    index_to_drop = []
+    for k, value in enumerate(df.index):
+        if k > 0 :
+            if prev_value > value:
+                index_to_drop.append(value)
+        prev_value = value
+
+    df.drop(index=index_to_drop, inplace=True)
+
 
     if cleaned_suffix:
         path = path[0:-4] + "_cleaned.srt"
@@ -106,3 +120,6 @@ def resample(file: str, sr: int = 16000):
 def output_name(prefix : str = "", file_type:str = ".srt"):
     now = datetime.now()
     return prefix + now.strftime("%Y%m%d_%H%M%S") + file_type
+
+if __name__ == "__main__":
+    clean_output("20240429_113320.srt")
