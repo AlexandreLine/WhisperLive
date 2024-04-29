@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const useGCPServer = useServerCheckbox.checked;
     if (useGCPServer){
       host = "35.214.174.85"
-      port = "9292"
+      port = "8080"
     }
 
     chrome.runtime.sendMessage(
