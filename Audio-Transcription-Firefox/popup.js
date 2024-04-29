@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     if (useGCPServer){
       host = "35.214.174.85"
-      port = "8080"
+      port = "9292"
     }
 
     browser.tabs.query({ active: true, currentWindow: true })
