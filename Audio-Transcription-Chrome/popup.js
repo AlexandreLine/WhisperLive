@@ -1,9 +1,13 @@
 // Wait for the DOM content to be fully loaded
 document.addEventListener("DOMContentLoaded", function () {
+  const folder_name = document.getElementById("folder_name");
+  
   const startButton = document.getElementById("startCapture");
   const stopButton = document.getElementById("stopCapture");
 
   const useServerCheckbox = document.getElementById("useServerCheckbox");
+  const testButton = document.getElementById("test");
+
   const useVadCheckbox = document.getElementById("useVadCheckbox");
   const languageDropdown = document.getElementById('languageDropdown');
   const taskDropdown = document.getElementById('taskDropdown');
@@ -11,6 +15,17 @@ document.addEventListener("DOMContentLoaded", function () {
   let selectedLanguage = null;
   let selectedTask = taskDropdown.value;
   let selectedModelSize = modelSizeDropdown.value;
+
+
+  document.getElementById("ServersConnected").disabled = true;
+
+  (async () => {
+    // see the note below on how to choose currentWindow or lastFocusedWindow
+    const [tab] = await chrome.tabs.query({active: true, lastFocusedWindow: true});
+    const url = new URL(tab.url);
+    folder_name.value = url.hostname;
+  })();
+
 
   // Add click event listeners to the buttons
   startButton.addEventListener("click", startCapture);
@@ -26,12 +41,12 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Retrieve checkbox state from storage on popup open
-  chrome.storage.local.get("useServerState", ({ useServerState }) => {
+/*   chrome.storage.local.get("useServerState", ({ useServerState }) => {
     if (useServerState !== undefined) {
       useServerCheckbox.checked = useServerState;
     }
-  });
-
+  }); */
+  
   chrome.storage.local.get("useVadState", ({ useVadState }) => {
     if (useVadState !== undefined) {
       useVadCheckbox.checked = useVadState;
@@ -70,13 +85,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const currentTab = await getCurrentTab();
 
     // Send a message to the background script to start capturing
-    let host = "transcription.kurg.org";
-    let port = "7090";
-    const useGCPServer = useServerCheckbox.checked;
-    if (useGCPServer){
-      host = "35.214.174.85"
-      port = "9292"
-    }
+    let host = "35.214.174.85";
+    let port = "9292";
+
+    //More options
+    const folderTrans = document.getElementById("folder_name").value
+    
 
     chrome.runtime.sendMessage(
       {
@@ -88,6 +102,7 @@ document.addEventListener("DOMContentLoaded", function () {
         task: selectedTask,
         modelSize: selectedModelSize,
         useVad: useVadCheckbox.checked,
+        folder: folder_name.value,
       }, () => {
         // Update capturing state in storage and toggle the buttons
         chrome.storage.local.set({ capturingState: { isCapturing: true } }, () => {
@@ -126,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function toggleCaptureButtons(isCapturing) {
     startButton.disabled = isCapturing;
     stopButton.disabled = !isCapturing;
-    useServerCheckbox.disabled = isCapturing;
+    //useServerCheckbox.disabled = isCapturing;
     useVadCheckbox.disabled = isCapturing;
     modelSizeDropdown.disabled = isCapturing;
     languageDropdown.disabled = isCapturing;
@@ -135,11 +150,15 @@ document.addEventListener("DOMContentLoaded", function () {
     stopButton.classList.toggle("disabled", !isCapturing);
   }
 
+  function testConnection() {
+
+  }
+
   // Save the checkbox state when it's toggled
-  useServerCheckbox.addEventListener("change", () => {
+/*   useServerCheckbox.addEventListener("change", () => {
     const useServerState = useServerCheckbox.checked;
     chrome.storage.local.set({ useServerState });
-  });
+  }); */
 
   useVadCheckbox.addEventListener("change", () => {
     const useVadState = useVadCheckbox.checked;
@@ -182,5 +201,22 @@ document.addEventListener("DOMContentLoaded", function () {
       chrome.storage.local.set({ capturingState: { isCapturing: false } })
     }
   });
+
+  window.onload = function() {
+    var container = document.getElementsByClassName('slidecontainer')[0];
+    var numSpeakers = document.createElement("input");
+    numSpeakers.type = 'range';
+    numSpeakers.value = 5;
+    numSpeakers.min = 1;
+    numSpeakers.max = 25;
+    container.append(numSpeakers);
+  
+    var output = document.getElementById("numSpeakers");
+    output.innerHTML = numSpeakers.value;
+  
+    numSpeakers.oninput = function() {
+      output.innerHTML = this.value;
+    }
+  }
 
 });

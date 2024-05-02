@@ -105,7 +105,27 @@ label {
 .checkbox-container {
   padding: 10px; 
 }
-
+/* 
 .dropdown-container {
   padding: 10px; 
+} */
+
+.row {
+  padding: 10px; 
+}
+
+.folder {
+  padding: 10px; 
+}
+
+.column {
+  float: left;
+  width: 50%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
 }
