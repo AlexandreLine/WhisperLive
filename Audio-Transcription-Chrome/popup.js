@@ -2,7 +2,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   const folder_name = document.getElementById("folder_name");
   const speakers = document.getElementById("speakers");
-  
+
   const startButton = document.getElementById("startCapture");
   const stopButton = document.getElementById("stopCapture");
 
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
       useServerCheckbox.checked = useServerState;
     }
   }); */
-  
+
   chrome.storage.local.get("useVadState", ({ useVadState }) => {
     if (useVadState !== undefined) {
       useVadCheckbox.checked = useVadState;
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     //More options
     const folderTrans = document.getElementById("folder_name").value
-    
+
 
     chrome.runtime.sendMessage(
       {
@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
         modelSize: selectedModelSize,
         useVad: useVadCheckbox.checked,
         folder: folder_name.value,
-        speakers: speakers.value,
+        speakers: numSpeakers.value
       }, () => {
         // Update capturing state in storage and toggle the buttons
         chrome.storage.local.set({ capturingState: { isCapturing: true } }, () => {
@@ -213,10 +213,10 @@ document.addEventListener("DOMContentLoaded", function () {
     numSpeakers.max = 25;
     numSpeakers.id = "speakers";
     container.append(numSpeakers);
-  
+
     var output = document.getElementById("numSpeakers");
     output.innerHTML = numSpeakers.value;
-  
+
     numSpeakers.oninput = function() {
       output.innerHTML = this.value;
     }

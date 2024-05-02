@@ -143,6 +143,8 @@ class TranscriptionServer:
                     language=options["language"],
                     task=options["task"],
                     client_uid=options["uid"],
+                    folder=options["folder"],
+                    speakers=options["speakers"],
                     model=whisper_tensorrt_path
                 )
                 logging.info("Running TensorRT backend.")
@@ -167,6 +169,8 @@ class TranscriptionServer:
                 task=options["task"],
                 client_uid=options["uid"],
                 model=options["model"],
+                folder=options["folder"],
+                speakers=options["speakers"],
                 initial_prompt=options.get("initial_prompt"),
                 vad_parameters=options.get("vad_parameters"),
                 use_vad=self.use_vad,
@@ -534,7 +538,7 @@ class ServeClientBase(object):
 
 
 class ServeClientTensorRT(ServeClientBase):
-    def __init__(self, websocket, task="transcribe", multilingual=False, language=None, client_uid=None, model=None):
+    def __init__(self, websocket, task="transcribe", multilingual=False, language=None, client_uid=None, model=None, folder="", speakers=5):
         """
         Initialize a ServeClient instance.
         The Whisper model is initialized based on the client's language and device availability.
@@ -553,6 +557,8 @@ class ServeClientTensorRT(ServeClientBase):
         super().__init__(client_uid, websocket)
         self.language = language if multilingual else "en"
         self.task = task
+        self.folder = folder
+        self.speakers = speakers
         self.eos = False
         self.transcriber = WhisperTRTLLM(
             model,
@@ -684,7 +690,7 @@ class ServeClientTensorRT(ServeClientBase):
 
 class ServeClientFasterWhisper(ServeClientBase):
     def __init__(self, websocket, task="transcribe", device=None, language=None, client_uid=None, model="small.en",
-                 initial_prompt=None, vad_parameters=None, use_vad=True):
+                folder="", speakers=5, initial_prompt=None, vad_parameters=None, use_vad=True):
         """
         Initialize a ServeClient instance.
         The Whisper model is initialized based on the client's language and device availability.
@@ -698,6 +704,8 @@ class ServeClientFasterWhisper(ServeClientBase):
             language (str, optional): The language for transcription. Defaults to None.
             client_uid (str, optional): A unique identifier for the client. Defaults to None.
             model (str, optional): The whisper model size. Defaults to 'small.en'
+            folder (str, optional): Transcript subfolder. Defaults to ""
+            speakers (int, optional): Number of speakers. Defaults to 5
             initial_prompt (str, optional): Prompt for whisper inference. Defaults to None.
         """
         super().__init__(client_uid, websocket)
@@ -715,6 +723,8 @@ class ServeClientFasterWhisper(ServeClientBase):
         self.initial_prompt = initial_prompt
         self.vad_parameters = vad_parameters or {"threshold": 0.5}
         self.no_speech_thresh = 0.45
+        self.folder = folder
+        self.speakers = speakers
 
         try:
             device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -857,7 +867,7 @@ class ServeClientFasterWhisper(ServeClientBase):
             segments = self.get_previous_output()
 
         if len(segments):
-            utils.update_srt_file(segments, self.output)
+            utils.update_srt_file(segments, self)
             self.send_transcription_to_client(segments)
 
     def speech_to_text(self):

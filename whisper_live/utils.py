@@ -28,7 +28,7 @@ def format_time(s):
     return f"{hours:02}:{minutes:02}:{seconds:02},{milliseconds:03}"
 
 
-def create_srt_file(segments, output_file):
+""" def create_srt_file(segments, output_file):
     with open(output_file, 'w', encoding='utf-8') as srt_file:
         segment_number = 1
         for segment in segments:
@@ -40,11 +40,17 @@ def create_srt_file(segments, output_file):
             srt_file.write(f"{start_time} --> {end_time}\n")
             srt_file.write(f"{text}\n\n")
 
-            segment_number += 1
+            segment_number += 1 """
 
 
-def update_srt_file(segments, output_file):
-    path = "transcripts/"+output_file
+def update_srt_file(segments, element):
+    if element.folder == "":
+        path = "transcripts/"+element.output_file
+    else :
+        path = "transcripts/" + element.folder + "/" + element.output_file
+        if not os.path.exists("transcripts/" + element.folder):
+            os.makedirs("transcripts/" + element.folder)
+
     if not os.path.exists(path):
         with open(path, 'w', encoding='utf-8') as srt_file:
             srt_file.write("start;end;text\n")
