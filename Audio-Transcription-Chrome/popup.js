@@ -1,6 +1,7 @@
 // Wait for the DOM content to be fully loaded
 document.addEventListener("DOMContentLoaded", function () {
   const folder_name = document.getElementById("folder_name");
+  const speakers = document.getElementById("speakers");
   
   const startButton = document.getElementById("startCapture");
   const stopButton = document.getElementById("stopCapture");
@@ -103,6 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
         modelSize: selectedModelSize,
         useVad: useVadCheckbox.checked,
         folder: folder_name.value,
+        speakers: speakers.value,
       }, () => {
         // Update capturing state in storage and toggle the buttons
         chrome.storage.local.set({ capturingState: { isCapturing: true } }, () => {
@@ -209,6 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
     numSpeakers.value = 5;
     numSpeakers.min = 1;
     numSpeakers.max = 25;
+    numSpeakers.id = "speakers";
     container.append(numSpeakers);
   
     var output = document.getElementById("numSpeakers");
