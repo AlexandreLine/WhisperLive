@@ -1,8 +1,6 @@
 // Wait for the DOM content to be fully loaded
 document.addEventListener("DOMContentLoaded", function () {
-  const folder_name = document.getElementById("folder_name");
-  const speakers = document.getElementById("speakers");
-
+  
   const startButton = document.getElementById("startCapture");
   const stopButton = document.getElementById("stopCapture");
 
@@ -13,9 +11,14 @@ document.addEventListener("DOMContentLoaded", function () {
   const languageDropdown = document.getElementById('languageDropdown');
   const taskDropdown = document.getElementById('taskDropdown');
   const modelSizeDropdown = document.getElementById('modelSizeDropdown');
+  const folder_name = document.getElementById("folder_name");
+  const speakers = document.getElementById("speakers");
+
   let selectedLanguage = null;
   let selectedTask = taskDropdown.value;
   let selectedModelSize = modelSizeDropdown.value;
+  let selectedFolder = folder_name.value;
+  let selectedSpeakers = speakers.value;
 
 
   document.getElementById("ServersConnected").disabled = true;
@@ -25,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const [tab] = await chrome.tabs.query({active: true, lastFocusedWindow: true});
     const url = new URL(tab.url);
     folder_name.value = url.hostname;
+    selectedFolder = folder_name.value;
   })();
 
 
@@ -75,6 +79,20 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  chrome.storage.local.get("selectedFolder", ({ selectedFolder: storedSpeakers }) => {
+    if (storedSpeakers !== undefined) {
+      folder_name.value = storedFolder;
+      selectedFolder = storedFolder;
+    }
+  });
+
+  chrome.storage.local.get("selectedSpeakers", ({ selectedSpeakers: storedSpeakers }) => {
+    if (storedSpeakers !== undefined) {
+      speakers.value = storedSpeakers;
+      selectedSpeakers = storedSpeakers;
+    }
+  });
+
   // Function to handle the start capture button click event
   async function startCapture() {
     // Ignore click if the button is disabled
@@ -89,9 +107,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let host = "35.214.174.85";
     let port = "9292";
 
-    //More options
-    const folderTrans = document.getElementById("folder_name").value
-
 
     chrome.runtime.sendMessage(
       {
@@ -103,8 +118,8 @@ document.addEventListener("DOMContentLoaded", function () {
         task: selectedTask,
         modelSize: selectedModelSize,
         useVad: useVadCheckbox.checked,
-        folder: folder_name.value,
-        speakers: numSpeakers.value
+        folder: selectedFolder,
+        speakers: selectedSpeakers
       }, () => {
         // Update capturing state in storage and toggle the buttons
         chrome.storage.local.set({ capturingState: { isCapturing: true } }, () => {
@@ -186,6 +201,17 @@ document.addEventListener("DOMContentLoaded", function () {
     chrome.storage.local.set({ selectedModelSize });
   });
 
+  folder_name.addEventListener('change', function() {
+    selectedFolder = folder_name.value;
+    chrome.storage.local.set({ selectedFolder });
+  });
+
+  speakers.addEventListener('change', function() {
+    selectedSpeakers = speakers.value;
+    chrome.storage.local.set({ selectedSpeakers });
+  });
+
+
   chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     if (request.action === "updateSelectedLanguage") {
       const detectedLanguage = request.detectedLanguage;
@@ -214,7 +240,7 @@ document.addEventListener("DOMContentLoaded", function () {
     numSpeakers.id = "speakers";
     container.append(numSpeakers);
 
-    var output = document.getElementById("numSpeakers");
+    var output = document.getElementById("speakers");
     output.innerHTML = numSpeakers.value;
 
     numSpeakers.oninput = function() {

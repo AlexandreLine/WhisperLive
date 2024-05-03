@@ -159,6 +159,8 @@ async function startCapture(options) {
           task: options.task,
           modelSize: options.modelSize,
           useVad: options.useVad,
+          folder: options.folder,
+          speakers: options.speakers
         },
       });
     } else {
