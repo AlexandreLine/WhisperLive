@@ -39,10 +39,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   }
   const speakers = document.getElementById("speakers");
-  if (speakers.value !== undefined) {
+/*   if (speakers.value !== undefined) {
     storedSpeakers = speakers.value;
   }
-
+ */
   document.getElementById("ServersConnected").disabled = true;
 
   (async () => {
