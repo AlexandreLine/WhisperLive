@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  chrome.storage.local.get("selectedFolder", ({ selectedFolder: storedSpeakers }) => {
+  chrome.storage.local.get("selectedFolder", ({ selectedFolder: storedFolder }) => {
     if (storedSpeakers !== undefined) {
       folder_name.value = storedFolder;
       selectedFolder = storedFolder;
@@ -240,7 +240,7 @@ document.addEventListener("DOMContentLoaded", function () {
     numSpeakers.id = "speakers";
     container.append(numSpeakers);
 
-    var output = document.getElementById("speakers");
+    var output = document.getElementById("speakers_num");
     output.innerHTML = numSpeakers.value;
 
     numSpeakers.oninput = function() {
