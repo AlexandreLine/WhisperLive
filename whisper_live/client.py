@@ -201,7 +201,9 @@ class Client:
                     "language": self.language,
                     "task": self.task,
                     "model": self.model,
-                    "use_vad": self.use_vad
+                    "use_vad": self.use_vad,
+                    "folder" : self.folder,
+                    "speakers" : self.speakers
                 }
             )
         )
@@ -257,7 +259,8 @@ class Client:
         if self.server_backend == "faster_whisper":
             if (self.last_segment):
                 self.transcript.append(self.last_segment)
-            utils.create_srt_file(self.transcript, output_path)
+            self.output_file = utils.output_name()
+            utils.update_srt_file(self.transcript, self)
 
     def wait_before_disconnect(self):
         """Waits a bit before disconnecting in order to process pending responses."""
@@ -601,6 +604,6 @@ class TranscriptionClient(TranscriptionTeeClient):
         transcription_client()
         ```
     """
-    def __init__(self, host, port, lang=None, translate=False, model="small", srt_file_path="output.srt", use_vad=True, play=True):
-        self.client = Client(host, port, lang, translate, model, srt_file_path=srt_file_path, use_vad=use_vad, play=play)
+    def __init__(self, host, port, lang=None, translate=False, model="small", use_vad=True, folder="default", speakers="5"):
+        self.client = Client(host, port, lang, translate, model, use_vad=use_vad, folder=folder, speakers=speakers)
         TranscriptionTeeClient.__init__(self, [self.client])

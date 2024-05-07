@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   window.onload = function() {
-    var container = document.getElementsByClassName('slidecontainer')[0];
+    //var container = document.getElementsByClassName('slidecontainer')[0];
     var numSpeakers = document.getElementById("speakers");
     /*var numSpeakers = document.createElement("input");
     numSpeakers.type = 'range';

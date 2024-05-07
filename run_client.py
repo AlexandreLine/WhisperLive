@@ -17,6 +17,6 @@ client = TranscriptionClient(
     use_vad=True,
     #play=True,
     folder="default",
-    speaker="1"
+    speakers="1"
     )
 client("./assets/jfk.flac")
