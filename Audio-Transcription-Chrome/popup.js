@@ -103,7 +103,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  let selectedSpeakers = speakers.value;
+  if (storedSpeakers !== undefined){
+    let selectedSpeakers = 5;
+  } else {
+    let selectedSpeakers = speakers.value;
+  }
 
   chrome.storage.local.get("selectedSpeakers", ({ selectedSpeakers: storedSpeakers }) => {
     if (storedSpeakers !== undefined) {
