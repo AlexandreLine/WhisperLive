@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let selectedTask = taskDropdown.value;
   let selectedModelSize = modelSizeDropdown.value;
   let selectedFolder = folder_name.value;
+  let storedSpeakers = null;
 
 
   window.onload = function() {
@@ -97,17 +98,17 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   chrome.storage.local.get("selectedFolder", ({ selectedFolder: storedFolder }) => {
-    if (storedSpeakers !== undefined) {
+    if (storedFolder !== undefined) {
       folder_name.value = storedFolder;
       selectedFolder = storedFolder;
     }
   });
 
-  if (storedSpeakers !== undefined){
-    let selectedSpeakers = 5;
+/*   if (speakers.value !== undefined){
+    selectedSpeakers = 5;
   } else {
-    let selectedSpeakers = speakers.value;
-  }
+    selectedSpeakers = speakers.value;
+  } */
 
   chrome.storage.local.get("selectedSpeakers", ({ selectedSpeakers: storedSpeakers }) => {
     if (storedSpeakers !== undefined) {
