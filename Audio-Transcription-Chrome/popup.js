@@ -18,11 +18,10 @@ document.addEventListener("DOMContentLoaded", function () {
   let selectedTask = taskDropdown.value;
   let selectedModelSize = modelSizeDropdown.value;
   let selectedFolder = folder_name.value;
-  if (speakers.value){
-    let selectedSpeakers = speakers.value;
-  } else {
-    let selectedSpeakers = 5;
+  if (!speakers.value){
+    speakers.value = 5 ;
   };
+  let selectedSpeakers = speakers.value;
 
 
   document.getElementById("ServersConnected").disabled = true;
