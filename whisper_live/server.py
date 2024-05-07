@@ -200,7 +200,7 @@ class TranscriptionServer:
             logging.info("New client connected")
             options = websocket.recv()
             options = json.loads(options)
-            print(options)
+            logging.debug(options)
             self.use_vad = options.get('use_vad')
             if self.client_manager.is_server_full(websocket, options):
                 websocket.close()
@@ -719,11 +719,12 @@ class ServeClientFasterWhisper(ServeClientBase):
         else:
             self.model_size_or_path = model
         self.language = "en" if self.model_size_or_path.endswith("en") else language
-        self.output = utils.output_name()
+        self.output_file = utils.output_name()
         self.task = task
         self.initial_prompt = initial_prompt
         self.vad_parameters = vad_parameters or {"threshold": 0.5}
         self.no_speech_thresh = 0.45
+        logging.debug(f"folder : {folder} / speakers : {speakers}")
         self.folder = folder
         self.speakers = speakers
 
@@ -890,8 +891,8 @@ class ServeClientFasterWhisper(ServeClientBase):
         """
         while True:
             if self.exit:
-                logging.info(f"Clean transcript : {self.output}")
-                utils.clean_output(self.output)
+                logging.info(f"Clean transcript : {self.folder}/{self.output_file}")
+                utils.clean_output(self.folder,self.output_file)
                 logging.info("Exiting speech to text thread")
                 break
 
@@ -911,6 +912,8 @@ class ServeClientFasterWhisper(ServeClientBase):
                     self.timestamp_offset += duration
                     time.sleep(0.25)    # wait for voice activity, result is None when no voice activity
                     continue
+                logging.debug(f"result : {result}")
+                logging.debug(f"duration : {duration}")
                 self.handle_transcription_output(result, duration)
 
             except Exception as e:

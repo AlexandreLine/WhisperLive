@@ -64,8 +64,8 @@ def update_srt_file(segments, element):
             srt_file.write(f"{start_time};{end_time};{text}\n")
 
 
-def clean_output(file, cleaned_suffix : bool = True, del_temp : bool = True):
-    path = "transcripts/" + file
+def clean_output(folder, file, cleaned_suffix : bool = True, del_temp : bool = False):
+    path = "transcripts/" + folder + "/" + file
 
     try :
         df = pd.read_csv(path, sep=";")

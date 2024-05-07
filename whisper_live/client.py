@@ -28,7 +28,9 @@ class Client:
         model="small",
         srt_file_path="output.srt",
         use_vad=True,
-        play=True
+        play=True,
+        folder="default",
+        speakers=5
     ):
         """
         Initializes a Client instance for audio recording and streaming to a server.
@@ -55,6 +57,8 @@ class Client:
         self.srt_file_path = srt_file_path
         self.use_vad = use_vad
         self.play = play
+        self.folder = folder
+        self.speakers = speakers
         self.last_segment = None
         self.last_received_segment = None
 
