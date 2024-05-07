@@ -36,7 +36,11 @@ document.addEventListener("DOMContentLoaded", function () {
     numSpeakers.oninput = function() {
       output.innerHTML = this.value;
     }
-    const speakers = document.getElementById("speakers");
+
+  }
+  const speakers = document.getElementById("speakers");
+  if (speakers.value !== undefined) {
+    storedSpeakers = speakers.value;
   }
 
   document.getElementById("ServersConnected").disabled = true;
