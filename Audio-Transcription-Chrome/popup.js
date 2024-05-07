@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (speakers.value){
     let selectedSpeakers = speakers.value;
   } else {
-    let selectedSpeakers = 5
+    let selectedSpeakers = 5;
   };
 
 
