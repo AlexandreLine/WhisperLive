@@ -35,10 +35,8 @@ document.addEventListener("DOMContentLoaded", function () {
     numSpeakers.oninput = function() {
       output.innerHTML = this.value;
     }
+    const speakers = document.getElementById("speakers");
   }
-  
-  const speakers = document.getElementById("speakers");
-  let selectedSpeakers = speakers.value;
 
   document.getElementById("ServersConnected").disabled = true;
 
@@ -104,6 +102,8 @@ document.addEventListener("DOMContentLoaded", function () {
       selectedFolder = storedFolder;
     }
   });
+
+  let selectedSpeakers = speakers.value;
 
   chrome.storage.local.get("selectedSpeakers", ({ selectedSpeakers: storedSpeakers }) => {
     if (storedSpeakers !== undefined) {
