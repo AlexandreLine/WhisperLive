@@ -160,7 +160,7 @@ async function startCapture(options) {
           modelSize: options.modelSize,
           useVad: options.useVad,
           folder: options.folder,
-          speakers: options.speakers
+          speakers: options.speakers,
         },
       });
     } else {

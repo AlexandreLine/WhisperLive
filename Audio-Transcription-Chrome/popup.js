@@ -1,11 +1,11 @@
 // Wait for the DOM content to be fully loaded
 document.addEventListener("DOMContentLoaded", function () {
-  
+
   const startButton = document.getElementById("startCapture");
   const stopButton = document.getElementById("stopCapture");
 
-  const useServerCheckbox = document.getElementById("useServerCheckbox");
-  const testButton = document.getElementById("test");
+  //const useServerCheckbox = document.getElementById("useServerCheckbox");
+  //const testButton = document.getElementById("test");
 
   const useVadCheckbox = document.getElementById("useVadCheckbox");
   const languageDropdown = document.getElementById('languageDropdown');
@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
         modelSize: selectedModelSize,
         useVad: useVadCheckbox.checked,
         folder: selectedFolder,
-        speakers: selectedSpeakers
+        speakers: selectedSpeakers,
       }, () => {
         // Update capturing state in storage and toggle the buttons
         chrome.storage.local.set({ capturingState: { isCapturing: true } }, () => {
