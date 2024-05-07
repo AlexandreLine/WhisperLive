@@ -719,6 +719,7 @@ class ServeClientFasterWhisper(ServeClientBase):
         else:
             self.model_size_or_path = model
         self.language = "en" if self.model_size_or_path.endswith("en") else language
+        self.auto_language = self.language
         self.output_file = utils.output_name()
         self.task = task
         self.initial_prompt = initial_prompt
@@ -791,8 +792,8 @@ class ServeClientFasterWhisper(ServeClientBase):
                         of the language detection.
         """
         if info.language_probability > 0.5:
-            self.language = info.language
-            logging.info(f"Detected language {self.language} with probability {info.language_probability}")
+            self.auto_language = info.language
+            logging.debug(f"Detected language {info.language} with probability {info.language_probability:.2f}")
             self.websocket.send(json.dumps(
                 {"uid": self.client_uid, "language": self.language, "language_prob": info.language_probability}))
 
@@ -815,7 +816,7 @@ class ServeClientFasterWhisper(ServeClientBase):
         result, info = self.transcriber.transcribe(
             input_sample,
             initial_prompt=self.initial_prompt,
-            language=self.language,
+            language=self.auto_language if self.language is None else self.language,
             task=self.task,
             vad_filter=self.use_vad,
             vad_parameters=self.vad_parameters if self.use_vad else None)
@@ -908,7 +909,7 @@ class ServeClientFasterWhisper(ServeClientBase):
                 input_sample = input_bytes.copy()
                 result = self.transcribe_audio(input_sample)
 
-                if result is None or self.language is None:
+                if result is None or (self.language is None and self.auto_language is None):
                     self.timestamp_offset += duration
                     time.sleep(0.25)    # wait for voice activity, result is None when no voice activity
                     continue
