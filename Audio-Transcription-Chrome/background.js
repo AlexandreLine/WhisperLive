@@ -150,15 +150,17 @@ async function startCapture(options) {
 
       await sendMessageToTab(optionTab.id, {
         type: "start_capture",
-        data: { 
-          currentTabId: currentTab.id, 
-          host: options.host, 
-          port: options.port, 
+        data: {
+          currentTabId: currentTab.id,
+          host: options.host,
+          port: options.port,
           multilingual: options.useMultilingual,
           language: options.language,
           task: options.task,
           modelSize: options.modelSize,
           useVad: options.useVad,
+          folder: options.folder,
+          speakers: options.speakers,
         },
       });
     } else {
@@ -207,5 +209,3 @@ chrome.runtime.onMessage.addListener(async (message) => {
     stopCapture();
   }
 });
-
-

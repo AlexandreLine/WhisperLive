@@ -1,9 +1,14 @@
-whisper_live/__pycache__/*.pyc
-*/__pycache__/*.pyc
-*.pyc
 .env
 env.py
 *.wav
 /assets/*
 *.srt
 *.ipynb
+
+*.egg
+*.egg-info
+*.bv
+*.pyc
+build
+__pycache__
+eggs
