@@ -12,23 +12,25 @@ document.addEventListener("DOMContentLoaded", function () {
   const taskDropdown = document.getElementById('taskDropdown');
   const modelSizeDropdown = document.getElementById('modelSizeDropdown');
   const folder_name = document.getElementById("folder_name");
+  const speakers = document.getElementById("speakers");
 
   let selectedLanguage = null;
   let selectedTask = taskDropdown.value;
   let selectedModelSize = modelSizeDropdown.value;
   let selectedFolder = folder_name.value;
-  let storedSpeakers = null;
+  let storedSpeakers = speakers.value;
 
 
   window.onload = function() {
     var container = document.getElementsByClassName('slidecontainer')[0];
-    var numSpeakers = document.createElement("input");
+    var numSpeakers = document.getElementById("speakers");
+    /*var numSpeakers = document.createElement("input");
     numSpeakers.type = 'range';
     numSpeakers.value = 5;
     numSpeakers.min = 1;
     numSpeakers.max = 25;
     numSpeakers.id = "speakers";
-    container.append(numSpeakers);
+    container.append(numSpeakers);*/
 
     var output = document.getElementById("speakers_num");
     output.innerHTML = numSpeakers.value;
@@ -38,11 +40,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
   }
-  const speakers = document.getElementById("speakers");
-/*   if (speakers.value !== undefined) {
-    storedSpeakers = speakers.value;
-  }
- */
+  //const speakers = document.getElementById("speakers");
+
   document.getElementById("ServersConnected").disabled = true;
 
   (async () => {
